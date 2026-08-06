@@ -12,8 +12,7 @@
 
   <style>
     :root {
-      --bg-dark: #050811;
-      --bg-card: rgba(10, 16, 30, 0.7);
+      --bg-dark: #050813;
       --accent-blue: #0088ff;
       --accent-cyan: #00d2ff;
       --accent-deep: #0055ff;
@@ -21,7 +20,6 @@
       --text-white: #ffffff;
       --text-muted: #94a3b8;
       --glass-border: rgba(0, 136, 255, 0.2);
-      --glass-glow: rgba(0, 136, 255, 0.35);
     }
 
     * {
@@ -33,10 +31,11 @@
     body {
       font-family: 'Inter', sans-serif;
       background-color: var(--bg-dark);
+      /* Exact Dot Matrix Pattern matching user reference image */
       background-image: 
-        radial-gradient(circle at 50% 35%, rgba(0, 136, 255, 0.18) 0%, transparent 60%),
-        radial-gradient(circle at 80% 80%, rgba(0, 210, 255, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 20% 20%, rgba(0, 85, 255, 0.1) 0%, transparent 50%);
+        radial-gradient(circle at 50% 38%, rgba(0, 136, 255, 0.16) 0%, transparent 65%),
+        radial-gradient(rgba(255, 255, 255, 0.08) 1.2px, transparent 1.2px);
+      background-size: 100% 100%, 24px 24px;
       color: var(--text-white);
       min-height: 100vh;
       display: flex;
@@ -44,18 +43,6 @@
       justify-content: space-between;
       overflow-x: hidden;
       position: relative;
-    }
-
-    /* Subtle cyber grid overlay */
-    body::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: linear-gradient(to right, rgba(0, 136, 255, 0.03) 1px, transparent 1px),
-                        linear-gradient(to bottom, rgba(0, 136, 255, 0.03) 1px, transparent 1px);
-      background-size: 50px 50px;
-      pointer-events: none;
-      z-index: 0;
     }
 
     /* Header Navbar */
@@ -151,7 +138,7 @@
     .hero-logo-container {
       width: 140px;
       height: 140px;
-      background: radial-gradient(circle, rgba(0, 136, 255, 0.25) 0%, rgba(5, 8, 17, 0.85) 70%);
+      background: radial-gradient(circle, rgba(0, 136, 255, 0.25) 0%, rgba(5, 8, 19, 0.85) 70%);
       border: 1px solid var(--glass-border);
       border-radius: 50%;
       display: flex;
