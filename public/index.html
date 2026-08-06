@@ -4,38 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MINITECH — Command every key you run</title>
-  <meta name="description" content="Minitech — Hệ thống hỗ trợ thi và quản lý Key tập trung cao cấp.">
-  <!-- Google Fonts: Inter -->
+  <meta name="description" content="Phần mềm hỗ trợ thi trực tuyến MINITECH">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg-dark: #050813;
+      --bg-dark: #07090e;
+      --bg-panel: #0d121f;
+      --border-color: rgba(59, 130, 246, 0.18);
       --accent-blue: #0088ff;
-      --accent-cyan: #00d2ff;
-      --accent-deep: #0055ff;
-      --gradient-primary: linear-gradient(135deg, #0088ff 0%, #00d2ff 100%);
+      --accent-gradient: linear-gradient(135deg, #0088ff 0%, #0055ff 100%);
+      --accent-glow: rgba(0, 136, 255, 0.35);
       --text-white: #ffffff;
       --text-muted: #94a3b8;
-      --glass-border: rgba(0, 136, 255, 0.2);
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--bg-dark);
-      /* Exact Dot Matrix Pattern matching user reference image */
-      background-image: 
-        radial-gradient(circle at 50% 38%, rgba(0, 136, 255, 0.16) 0%, transparent 65%),
-        radial-gradient(rgba(255, 255, 255, 0.08) 1.2px, transparent 1.2px);
-      background-size: 100% 100%, 24px 24px;
+    html, body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg-dark);
       color: var(--text-white);
       min-height: 100vh;
       display: flex;
@@ -43,57 +33,73 @@
       justify-content: space-between;
       overflow-x: hidden;
       position: relative;
+      background-image: 
+        radial-gradient(circle at 15% 20%, rgba(0, 136, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(0, 85, 255, 0.06) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.5) 0%, transparent 100%);
     }
 
-    /* Header Navbar */
+    /* Synchronized Ambient Dot Matrix Grid */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 24px 24px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Synchronized Top Navbar */
     header {
       position: relative;
       z-index: 10;
-      padding: 1.5rem 3rem;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      max-width: 1400px;
-      margin: 0 auto;
+      justify-content: space-between;
+      padding: 0.85rem 2rem;
+      background: rgba(7, 9, 14, 0.95);
+      border-bottom: 1px solid var(--border-color);
+      backdrop-filter: blur(16px);
+      flex-shrink: 0;
+      height: 60px;
       width: 100%;
     }
 
     .brand-logo {
       display: flex;
       align-items: center;
-      gap: 0.85rem;
+      gap: 0.75rem;
       text-decoration: none;
       color: white;
     }
 
     .brand-logo-img {
-      height: 38px;
+      height: 36px;
       width: auto;
       object-fit: contain;
-      filter: drop-shadow(0 0 12px rgba(0, 136, 255, 0.6));
+      filter: drop-shadow(0 0 10px rgba(0, 136, 255, 0.5));
     }
 
     .brand-logo-text {
-      font-weight: 900;
-      font-size: 1.25rem;
-      letter-spacing: 0.08em;
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      color: white;
       text-transform: uppercase;
-      background: linear-gradient(to right, #ffffff, #80c4ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
     }
 
     .nav-actions {
       display: flex;
       align-items: center;
-      gap: 1.5rem;
+      gap: 1.25rem;
     }
 
     .nav-link {
       color: var(--text-muted);
       text-decoration: none;
       font-size: 0.9rem;
-      font-weight: 500;
+      font-weight: 600;
       transition: color 0.2s;
     }
 
@@ -102,26 +108,26 @@
     }
 
     .btn-get-started {
-      background: var(--gradient-primary);
+      background: var(--accent-gradient);
       color: white;
       text-decoration: none;
-      padding: 0.65rem 1.4rem;
+      padding: 0.55rem 1.25rem;
       border-radius: 9999px;
-      font-size: 0.875rem;
-      font-weight: 600;
+      font-size: 0.85rem;
+      font-weight: 700;
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      box-shadow: 0 0 25px rgba(0, 136, 255, 0.5);
+      box-shadow: 0 0 20px rgba(0, 136, 255, 0.4);
       transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .btn-get-started:hover {
       transform: translateY(-2px);
-      box-shadow: 0 0 35px rgba(0, 210, 255, 0.7);
+      box-shadow: 0 0 30px rgba(0, 136, 255, 0.6);
     }
 
-    /* Hero Section */
+    /* Hero Main Section */
     main {
       position: relative;
       z-index: 10;
@@ -130,23 +136,23 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 3rem 1.5rem;
+      padding: 4rem 1.5rem;
       margin: auto;
     }
 
-    /* Center Minitech Logo Mascot Icon */
+    /* Center MINITECH Logo Mascot Icon */
     .hero-logo-container {
-      width: 140px;
-      height: 140px;
-      background: radial-gradient(circle, rgba(0, 136, 255, 0.25) 0%, rgba(5, 8, 19, 0.85) 70%);
-      border: 1px solid var(--glass-border);
+      width: 130px;
+      height: 130px;
+      background: radial-gradient(circle, rgba(0, 136, 255, 0.2) 0%, rgba(7, 9, 14, 0.9) 70%);
+      border: 1px solid var(--border-color);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       margin-bottom: 2rem;
       position: relative;
-      box-shadow: 0 0 80px rgba(0, 136, 255, 0.4);
+      box-shadow: 0 0 60px rgba(0, 136, 255, 0.35);
       animation: float 4s ease-in-out infinite;
     }
 
@@ -156,10 +162,10 @@
     }
 
     .hero-logo-img {
-      width: 80px;
-      height: 80px;
+      width: 75px;
+      height: 75px;
       object-fit: contain;
-      filter: drop-shadow(0 0 20px rgba(0, 210, 255, 0.9));
+      filter: drop-shadow(0 0 20px rgba(0, 136, 255, 0.8));
     }
 
     /* Title */
@@ -170,20 +176,17 @@
       text-transform: uppercase;
       line-height: 1;
       margin-bottom: 1.25rem;
-      background: linear-gradient(180deg, #ffffff 30%, #7dd3fc 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 40px rgba(0, 136, 255, 0.3);
+      color: #ffffff;
+      text-shadow: 0 0 30px rgba(0, 136, 255, 0.4);
     }
 
     /* Subtitle */
     .hero-subtitle {
-      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
       color: var(--text-muted);
-      font-weight: 400;
+      font-weight: 500;
       max-width: 600px;
       margin-bottom: 3rem;
-      letter-spacing: -0.01em;
     }
 
     /* Action Buttons */
@@ -196,33 +199,33 @@
     }
 
     .btn-action-primary {
-      background: var(--gradient-primary);
+      background: var(--accent-gradient);
       color: white;
       text-decoration: none;
-      padding: 0.9rem 2.4rem;
+      padding: 0.85rem 2.2rem;
       border-radius: 9999px;
-      font-weight: 600;
+      font-weight: 700;
       font-size: 0.95rem;
       display: inline-flex;
       align-items: center;
       gap: 0.6rem;
-      box-shadow: 0 0 35px rgba(0, 136, 255, 0.55);
+      box-shadow: 0 0 30px rgba(0, 136, 255, 0.5);
       transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .btn-action-primary:hover {
       transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 0 50px rgba(0, 210, 255, 0.8);
+      box-shadow: 0 0 45px rgba(0, 136, 255, 0.75);
     }
 
     .btn-action-secondary {
-      background: rgba(10, 16, 30, 0.6);
-      border: 1px solid var(--glass-border);
+      background: rgba(13, 18, 31, 0.8);
+      border: 1px solid var(--border-color);
       color: white;
       text-decoration: none;
-      padding: 0.9rem 2.4rem;
+      padding: 0.85rem 2.2rem;
       border-radius: 9999px;
-      font-weight: 600;
+      font-weight: 700;
       font-size: 0.95rem;
       display: inline-flex;
       align-items: center;
@@ -233,7 +236,7 @@
 
     .btn-action-secondary:hover {
       background: rgba(0, 136, 255, 0.15);
-      border-color: rgba(0, 210, 255, 0.4);
+      border-color: rgba(0, 136, 255, 0.4);
       transform: translateY(-3px);
     }
 
@@ -250,7 +253,7 @@
 
     @media (max-width: 640px) {
       header {
-        padding: 1.25rem 1.5rem;
+        padding: 0.85rem 1.25rem;
       }
       .hero-actions {
         flex-direction: column;
@@ -266,7 +269,7 @@
 </head>
 <body>
 
-  <!-- Top Navbar -->
+  <!-- Synchronized Top Navbar -->
   <header>
     <a href="/" class="brand-logo">
       <img src="/logo.png" alt="MINITECH Logo" class="brand-logo-img">
