@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MINITECH – Phòng Hỗ Trợ Thi</title>
+  <meta name="description" content="Phần mềm hỗ trợ thi trực tuyến MINITECH">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-dark: #07090e;
+      --bg-panel: #0d121f;
+      --bg-card: #131b2e;
+      --bg-input: #1a243b;
+      --border-color: rgba(59, 130, 246, 0.18);
+      --border-focus: #0088ff;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-blue: #0088ff;
+      --accent-gradient: linear-gradient(135deg, #0088ff 0%, #0055ff 100%);
+      --accent-glow: rgba(0, 136, 255, 0.35);
+      --success-green: #10b981;
+      --danger-red: #ef4444;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-main);
+      height: 100vh;
+      width: 100vw;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background-image: 
+        radial-gradient(circle at 15% 20%, rgba(0, 136, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(0, 85, 255, 0.06) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.5) 0%, transparent 100%);
+    }
+
+    /* Ambient background grid */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 24px 24px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Top Navbar */
+    header {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 2rem;
+      background: rgba(7, 9, 14, 0.95);
+      border-bottom: 1px solid var(--border-color);
+      backdrop-filter: blur(16px);
+      flex-shrink: 0;
+      height: 60px;
+    }
+
+    .brand-container {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .brand-logo {
+      height: 36px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 0 10px rgba(0, 136, 255, 0.5));
+    }
+    .brand-name {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      color: #ffffff;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .btn-login {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.5rem 1.1rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn-login:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: var(--accent-blue);
+    }
+
+    .btn-started {
+      background: var(--accent-gradient);
+      color: #ffffff;
+      padding: 0.5rem 1.25rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 15px var(--accent-glow);
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .btn-started:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(0, 136, 255, 0.5);
+    }
+
+    /* SECTION 1: KEY ENTRY MODAL VIEW (Matching Image 1) */
+    #key-entry-screen {
+      position: relative;
+      z-index: 5;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .entry-card {
+      width: 100%;
+      max-width: 440px;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2.25rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 136, 255, 0.12);
+      text-align: left;
+      backdrop-filter: blur(20px);
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .entry-title {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 0.35rem;
+      letter-spacing: -0.01em;
+    }
+
+    .entry-subtitle {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .entry-input {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1rem 0.85rem 2.75rem;
+      color: #ffffff;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      transition: all 0.2s;
+    }
+    .entry-input:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(0, 136, 255, 0.25);
+      background: #1e2a47;
+    }
+
+    .btn-join {
+      width: 100%;
+      background: var(--accent-gradient);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 0.9rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 20px var(--accent-glow);
+      transition: all 0.2s;
+      letter-spacing: 0.02em;
+    }
+    .btn-join:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 136, 255, 0.5);
+    }
+
+    /* Active Rooms Bar inside Entry Screen */
+    .active-rooms-box {
+      margin-top: 1.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border-color);
+    }
+    .rooms-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .rooms-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      max-height: 160px;
+      overflow-y: auto;
+    }
+    .room-chip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.6rem 0.85rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      transition: all 0.15s;
+    }
+    .room-chip:hover {
+      background: rgba(0, 136, 255, 0.12);
+      border-color: var(--accent-blue);
+      color: #38bdf8;
+    }
+
+    /* SECTION 2: INSIDE WORKSPACE DASHBOARD VIEW (Matching Image 2 in Blue Theme) */
+    #workspace-screen {
+      position: relative;
+      z-index: 5;
+      flex: 1;
+      display: none;
+      flex-direction: column;
+      height: calc(100vh - 65px);
+      overflow: hidden;
+    }
+
+    /* Workspace Top Toolbar */
+    .workspace-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.65rem 1.5rem;
+      background: var(--bg-panel);
+      border-bottom: 1px solid var(--border-color);
+      gap: 1rem;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+
+    .room-tag {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(0, 136, 255, 0.12);
+      border: 1px solid rgba(0, 136, 255, 0.3);
+      padding: 0.35rem 0.75rem;
+      border-radius: var(--radius-sm);
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      color: #38bdf8;
+      font-size: 0.85rem;
+    }
+
+    .btn-toolbar {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.45rem 0.85rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .btn-toolbar:hover {
+      background: rgba(0, 136, 255, 0.15);
+      border-color: var(--accent-blue);
+      color: #ffffff;
+    }
+
+    .mode-switch {
+      display: flex;
+      background: var(--bg-dark);
+      padding: 3px;
+      border-radius: 999px;
+      border: 1px solid var(--border-color);
+    }
+    .mode-btn {
+      padding: 0.3rem 0.85rem;
+      border-radius: 999px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .mode-btn.active {
+      background: var(--accent-gradient);
+      color: white;
+      box-shadow: 0 2px 10px var(--accent-glow);
+    }
+
+    /* 2-Column Layout */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      flex: 1;
+      height: calc(100vh - 120px);
+      overflow: hidden;
+    }
+
+    /* Panel 1: Left Chat & Message Feed */
+    .left-panel {
+      background: var(--bg-panel);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+    .panel-header {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .chat-stream {
+      flex: 1;
+      padding: 1rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .chat-bubble {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 0.75rem 0.85rem;
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      font-weight: 600;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+    .chat-bubble.answer-summary {
+      background: rgba(0, 136, 255, 0.15);
+      border-color: rgba(0, 136, 255, 0.4);
+      color: #38bdf8;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .chat-input-bar {
+      padding: 0.85rem;
+      border-top: 1px solid var(--border-color);
+      background: var(--bg-dark);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    /* Panel 2: Center Questions Container (Independent Scrollbar) */
+    .center-panel {
+      padding: 1.25rem;
+      overflow-y: auto;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .question-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      transition: border-color 0.2s;
+      flex-shrink: 0;
+      width: 100%;
+    }
+    .question-card:hover {
+      border-color: rgba(0, 136, 255, 0.4);
+    }
+    .card-header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1.25rem;
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--border-color);
+    }
+    .question-number-badge {
+      background: var(--accent-gradient);
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      letter-spacing: 0.05em;
+    }
+    .card-status-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.12);
+      color: var(--text-muted);
+    }
+    .card-status-tag.answered {
+      background: rgba(16, 185, 129, 0.15);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .card-body {
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .image-preview-box {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.4);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-in;
+      border: 1px solid var(--border-color);
+    }
+    .image-preview-box img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      display: block;
+    }
+    .image-preview-box canvas {
+      width: 100% !important;
+      height: auto !important;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* Option Row Grid (A, B, C, D) */
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .option-btn-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.65rem 1rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .option-btn-row:hover {
+      background: rgba(0, 136, 255, 0.1);
+      border-color: var(--accent-blue);
+    }
+    .option-btn-row.selected {
+      background: rgba(0, 136, 255, 0.28) !important;
+      border: 1.5px solid #0088ff !important;
+      box-shadow: 0 0 15px rgba(0, 136, 255, 0.45) !important;
+      color: #ffffff !important;
+    }
+    .option-btn-row.selected .option-letter {
+      background: #0088ff !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 10px #0088ff !important;
+    }
+
+    /* Panel 3: Right Control Panel & Quick Grid 1-50 */
+    .right-panel {
+      background: var(--bg-panel);
+      border-left: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 1rem;
+      gap: 1rem;
+    }
+
+    .quick-grid-header {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .number-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+    }
+    .grid-num-btn {
+      aspect-ratio: 1;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .grid-num-btn:hover {
+      border-color: var(--accent-blue);
+      color: white;
+    }
+    .grid-num-btn.done {
+      background: var(--accent-blue);
+      border-color: var(--accent-blue);
+      color: white;
+      box-shadow: 0 0 8px rgba(0, 136, 255, 0.4);
+    }
+
+    /* Utility Modal Preview */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .modal-backdrop.active { display: flex; }
+    .modal-backdrop img {
+      max-width: 95vw;
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: var(--radius-md);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background: var(--success-green);
+      color: white;
+      padding: 0.75rem 1.25rem;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 0.85rem;
+      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 2000;
+    }
+    .toast.active { transform: translateY(0); opacity: 1; }
+
+    /* Mobile Responsive */
+    @media (max-width: 900px) {
+      .workspace-grid {
+        grid-template-columns: 1fr;
+        height: auto;
+        overflow: visible;
+      }
+      .left-panel, .right-panel {
+        height: auto;
+      }
+      header {
+        padding: 0.75rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Navigation -->
+  <header>
+    <div class="brand-container">
+      <img src="/logo.png" alt="MINITECH Logo" class="brand-logo" onerror="this.style.display='none'">
+      <span class="brand-name">MINITECH</span>
+    </div>
+    <div class="nav-actions">
+      <a href="/login" class="btn-login">Log in</a>
+      <button class="btn-started" onclick="focusKeyInput()">
+        Get started <span style="font-size:1rem;">→</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- VIEW 1: KEY ENTRY MODAL SCREEN (Matching Image 1) -->
+  <div id="key-entry-screen">
+    <div class="entry-card">
+      <h2 class="entry-title">Tham gia phòng chat</h2>
+      <p class="entry-subtitle">Nhập mã phòng để vào phiên hỗ trợ thi.</p>
+
+      <form id="key-form" onsubmit="handleJoinRoom(event)">
+        <div class="form-group">
+          <label class="form-label">Mã phòng</label>
+          <div class="input-wrapper">
+            <span class="input-icon">🔑</span>
+            <input type="text" id="room-key-input" class="entry-input" placeholder="ID: ABC123" required autocomplete="off">
+          </div>
+        </div>
+        <button type="submit" class="btn-join">Tham gia phòng</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- VIEW 2: FULL SUPPORT WORKSPACE SCREEN (Matching Image 2 in Blue Theme) -->
+  <div id="workspace-screen">
+    <!-- Top Workspace Navbar -->
+    <div class="workspace-nav">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <div id="current-room-tag" class="room-tag">#ID_PHONG</div>
+        <button class="btn-toolbar" onclick="clearRoomMessages()">🗑️ Xóa tin nhắn</button>
+      </div>
+
+      <!-- Mode Toggle Pill -->
+      <div class="mode-switch">
+        <button id="btn-mode-capture" class="mode-btn active" onclick="setWorkspaceMode('capture')">📷 Capture</button>
+        <button id="btn-mode-data" class="mode-btn" onclick="setWorkspaceMode('data')">📄 Data</button>
+      </div>
+
+      <!-- Right Action Tools -->
+      <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+        <button class="btn-toolbar" onclick="downloadAllImages()">📥 Tải ảnh</button>
+        <button class="btn-toolbar" onclick="copyAllAnswers()">📋 Copy đáp án</button>
+        <button class="btn-toolbar" style="background: rgba(239,68,68,0.15); border-color: rgba(239,68,68,0.3); color: #ef4444;" onclick="exitRoom()">🚪 Rời phòng</button>
+      </div>
+    </div>
+
+    <!-- 3-Column Main Grid -->
+    <div class="workspace-grid">
+      <!-- Left Panel: Chat History Stream -->
+      <div class="left-panel">
+        <div class="panel-header">
+          <span>Nhật ký trợ giúp</span>
+          <span style="color: var(--success-green); font-size: 0.7rem;">● LIVE</span>
+        </div>
+        <div id="chat-stream-list" class="chat-stream">
+        </div>
+
+        <div class="chat-input-bar">
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <input type="text" id="chat-text-input" class="entry-input" placeholder="Nhập dải đáp án (VD: 1a 2b 3c 4d)..." style="flex: 1; padding: 0.65rem 0.85rem; font-size: 0.85rem;" onkeypress="if(event.key==='Enter') sendChatMessage()">
+            <button class="btn-started" style="padding: 0.65rem 1.1rem; white-space: nowrap;" onclick="sendChatMessage()">Gửi đáp án</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center Panel: Question Cards Stream -->
+      <div id="center-question-stream" class="center-panel">
+        <div style="text-align: center; color: var(--text-muted); padding: 3rem;">
+          Đang tải dữ liệu câu hỏi bài thi...
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Image Zoom Modal -->
+  <div id="image-modal" class="modal-backdrop" onclick="closeImageModal()">
+    <img id="modal-img-element" src="" alt="Full Preview">
+  </div>
+
+  <div id="toast-msg" class="toast">Đã lưu thành công</div>
+
+  <script>
+    let currentKey = '';
+    let currentScreenshots = [];
+    let noteStorage = {};
+    let pollTimer = null;
+
+    function focusKeyInput() {
+      document.getElementById('room-key-input').focus();
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast-msg');
+      toast.innerText = msg;
+      toast.classList.add('active');
+      setTimeout(() => toast.classList.remove('active'), 2500);
+    }
+
+    let audioUnlocked = false;
+
+    function unlockAudio() {
+      if (audioUnlocked) return;
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) {
+          const ctx = new AudioCtx();
+          ctx.resume().then(() => { audioUnlocked = true; });
+        }
+      } catch (e) { }
+    }
+    document.addEventListener('click', unlockAudio, { once: false });
+
+    let globalRoomFingerprint = "";
+
+    // Load active keys list on Entry Screen
+    async function loadActiveRooms() {
+      try {
+        const res = await fetch('/api/keys');
+        const data = await res.json();
+        if (data.success && data.keys) {
+          renderActiveRooms(data.keys);
+
+          // Detect new incoming candidate screenshots across any room
+          const fp = data.keys.map(k => `${k.key}_${k.screenshotCount || 0}`).join('|');
+          if (globalRoomFingerprint !== "" && fp !== globalRoomFingerprint) {
+            playTingSound();
+            showToast("🔔 THÍ SINH VỪA GỬI ẢNH MỚI VỀ SERVER!");
+          }
+          globalRoomFingerprint = fp;
+        }
+      } catch (err) { console.error("Active rooms load error:", err); }
+    }
+
+    function renderActiveRooms(keys) {
+      const container = document.getElementById('active-rooms-container');
+      const badge = document.getElementById('active-count-badge');
+      if (!container) return;
+      if (badge) badge.innerText = `${keys ? keys.length : 0} Online`;
+
+      if (!keys || keys.length === 0) {
+        container.innerHTML = `<div style="color: var(--text-muted); font-size: 0.8rem; text-align: center; padding: 0.75rem;">Chưa có phòng thi nào online</div>`;
+        return;
+      }
+
+      container.innerHTML = keys.map(k => `
+        <div class="room-chip" onclick="joinRoomDirect('${k.key}')">
+          <span>🔑 ${k.key}</span>
+          <span style="color: var(--accent-blue); font-weight: 700;">${k.screenshotCount || 0} ảnh</span>
+        </div>
+      `).join('');
+    }
+
+    function joinRoomDirect(keyName) {
+      document.getElementById('room-key-input').value = keyName;
+      enterWorkspace(keyName);
+    }
+
+    function handleJoinRoom(e) {
+      e.preventDefault();
+      const val = document.getElementById('room-key-input').value.trim();
+      if (!val) return;
+      enterWorkspace(val);
+    }
+
+    function enterWorkspace(keyName) {
+      currentKey = keyName.toUpperCase();
+      const roomTag = document.getElementById('current-room-tag');
+      if (roomTag) roomTag.innerText = `# ${currentKey}`;
+
+      const headerTitle = document.getElementById('room-header-title');
+      if (headerTitle) headerTitle.innerText = `← ${currentKey}`;
+
+      const keyScreen = document.getElementById('key-entry-screen');
+      if (keyScreen) keyScreen.style.display = 'none';
+
+      const wsScreen = document.getElementById('workspace-screen');
+      if (wsScreen) wsScreen.style.display = 'flex';
+
+      loadWorkspaceData();
+
+      if (pollTimer) clearInterval(pollTimer);
+      pollTimer = setInterval(loadWorkspaceData, 2000);
+    }
+
+    function exitRoom() {
+      if (pollTimer) clearInterval(pollTimer);
+      const wsScreen = document.getElementById('workspace-screen');
+      if (wsScreen) wsScreen.style.display = 'none';
+      const keyScreen = document.getElementById('key-entry-screen');
+      if (keyScreen) keyScreen.style.display = 'flex';
+    }
+
+    let lastWorkspaceFingerprint = "";
+
+    function playTingSound() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        if (ctx.state === 'suspended') {
+          ctx.resume();
+        }
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(987.77, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(1975.53, ctx.currentTime + 0.1);
+
+        gain.gain.setValueAtTime(0.5, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start();
+        osc.stop(ctx.currentTime + 0.35);
+      } catch (e) { }
+    }
+
+    async function loadWorkspaceData() {
+      if (!currentKey) return;
+
+      try {
+        // Load note
+        const noteRes = await fetch(`/api/notes/${encodeURIComponent(currentKey)}`);
+        const noteData = await noteRes.json();
+        const existingNote = noteData.success ? (noteData.note || '') : '';
+
+        // Load screenshots
+        const ssRes = await fetch(`/api/screenshots/${encodeURIComponent(currentKey)}`);
+        const ssData = await ssRes.json();
+
+        if (ssData.success) {
+          currentScreenshots = ssData.screenshots || [];
+          
+          const currentFingerprint = `${currentKey}_${currentScreenshots.map(s => s.id || s.filename).join('_')}_${existingNote}`;
+          if (currentFingerprint !== lastWorkspaceFingerprint) {
+            if (lastWorkspaceFingerprint !== "") {
+              playTingSound();
+              showToast("🔔 THÍ SINH VỪA GỬI DỮ LIỆU/TIN NHẮN MỚI!");
+            }
+            lastWorkspaceFingerprint = currentFingerprint;
+            renderChatStream(existingNote);
+            renderQuestionsStream(currentScreenshots, existingNote);
+          }
+        }
+      } catch (err) { console.error("Workspace load error:", err); }
+    }
+
+    function renderChatStream(noteText) {
+      const container = document.getElementById('chat-stream-list');
+      if (!container) return;
+      if (!noteText || !noteText.trim()) {
+        container.innerHTML = `<div style="color: var(--text-muted); font-size: 0.75rem; text-align: center; padding: 1rem;">Chưa có tin nhắn nào</div>`;
+        return;
+      }
+      const lines = noteText.split('\n').filter(l => l.trim().length > 0);
+      container.innerHTML = lines.map(line => {
+        const isCandidate = line.includes('[Thí sinh]:');
+        return `
+          <div class="chat-bubble ${isCandidate ? '' : 'answer-summary'}" style="${isCandidate ? 'border-left: 3px solid #3b82f6; background: rgba(59, 130, 246, 0.1);' : ''}">
+            ${line}
+          </div>
+        `;
+      }).join('');
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function getSelectedOptionForQuestion(qNum, noteText) {
+      if (!noteText) return null;
+      const match = noteText.match(new RegExp(`Câu\\s*${qNum}\\s*:\\s*([A-D])`, 'i')) ||
+                    noteText.match(new RegExp(`\\b${qNum}([A-D])\\b`, 'i'));
+      return match ? match[1].toUpperCase() : null;
+    }
+
+    function renderQuestionsStream(screenshots, noteText) {
+      const container = document.getElementById('center-question-stream');
+
+      if (!screenshots || screenshots.length === 0) {
+        container.innerHTML = `
+          <div class="question-card" style="padding: 3rem; text-align: center; color: var(--text-muted);">
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📸</div>
+            <h3 style="color: white; margin-bottom: 0.25rem;">Chưa có ảnh chụp nào</h3>
+            <p style="font-size: 0.85rem;">Nhấn <b>Ctrl + X</b> trên OverlayApp để chụp câu hỏi gửi lên đây.</p>
+          </div>`;
+        return;
+      }
+
+      container.innerHTML = screenshots.map((ss, idx) => {
+        const qNum = idx + 1;
+        const imgUrl = ss.url.startsWith('http') ? ss.url : `/uploads/${ss.filename}`;
+        
+        return `
+          <div id="q-card-${qNum}" class="question-card">
+            <div class="card-header-bar">
+              <span class="question-number-badge">ẢNH ${qNum}</span>
+              <span class="card-status-tag">Ảnh ${qNum}/${screenshots.length}</span>
+            </div>
+
+            <div class="card-body">
+              <!-- Full Capture View (Mode: Capture) -->
+              <div class="full-capture-view image-preview-box" onclick="openImageModal('${imgUrl}')">
+                <img src="${imgUrl}" alt="Full Capture Câu ${qNum}">
+              </div>
+
+              <!-- Cropped Data View (Mode: Data) -->
+              <div class="cropped-data-view image-preview-box" style="display: none;" onclick="openImageModal('${imgUrl}')">
+                <canvas id="crop-canvas-${qNum}" style="width: 100%; max-height: 480px; object-fit: contain;"></canvas>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Post-render crop for Data Mode & restore active mode visibility
+      screenshots.forEach((ss, idx) => {
+        const qNum = idx + 1;
+        const imgUrl = ss.url.startsWith('http') ? ss.url : `/uploads/${ss.filename}`;
+        const canvasEl = document.getElementById(`crop-canvas-${qNum}`);
+        if (canvasEl) {
+          autoCropCanvas(imgUrl, canvasEl);
+        }
+      });
+      setWorkspaceMode(currentWorkspaceMode);
+    }
+
+    async function selectAnswerOption(qNum, optionLetter) {
+      const inputEl = document.getElementById(`note-input-${qNum}`);
+      if (inputEl) {
+        inputEl.value = `Câu ${qNum}: ${optionLetter}`;
+      }
+
+      ['A', 'B', 'C', 'D'].forEach(opt => {
+        const btn = document.getElementById(`opt-btn-${qNum}-${opt}`);
+        if (btn) {
+          if (opt === optionLetter) {
+            btn.classList.add('selected');
+          } else {
+            btn.classList.remove('selected');
+          }
+        }
+      });
+
+      await saveNoteText(`Câu ${qNum}: ${optionLetter}`);
+      showToast(`Đã chọn đáp án ${optionLetter} cho Câu ${qNum}`);
+    }
+
+    async function saveQuestionNote(qNum) {
+      const inputEl = document.getElementById(`note-input-${qNum}`);
+      if (inputEl) {
+        await saveNoteText(inputEl.value);
+        showToast(`Đã lưu ghi chú cho Câu ${qNum}`);
+      }
+    }
+
+    async function saveNoteText(txt) {
+      try {
+        await fetch('/api/notes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ key: currentKey, note: txt })
+        });
+        loadWorkspaceData();
+      } catch(err) { console.error("Error saving note:", err); }
+    }
+
+    function renderDynamicNumberGrid(totalCount, noteText) {
+      const container = document.getElementById('quick-grid-container');
+      const countEl = document.getElementById('grid-done-count');
+      const headerTitle = document.getElementById('questions-list-title');
+
+      if (headerTitle) {
+        headerTitle.innerText = `Danh sách ảnh chụp (${totalCount} ảnh)`;
+      }
+
+      if (!totalCount || totalCount === 0) {
+        container.innerHTML = `<div style="grid-column: 1 / -1; color: var(--text-muted); font-size: 0.8rem; text-align: center; padding: 1.5rem;">Chưa có câu hỏi nào được chụp</div>`;
+        if (countEl) countEl.innerText = `0/0`;
+        return;
+      }
+
+      let html = '';
+      let answeredCount = 0;
+
+      for (let i = 1; i <= totalCount; i++) {
+        const isDone = noteText && (
+          noteText.includes(`Câu ${i}:`) || 
+          noteText.includes(`${i}A`) || 
+          noteText.includes(`${i}B`) || 
+          noteText.includes(`${i}C`) || 
+          noteText.includes(`${i}D`)
+        );
+        if (isDone) answeredCount++;
+        html += `<div id="grid-btn-${i}" class="grid-num-btn ${isDone ? 'done' : ''}" onclick="scrollToQuestion(${i})">${i}</div>`;
+      }
+
+      container.innerHTML = html;
+      if (countEl) countEl.innerText = `${answeredCount}/${totalCount}`;
+    }
+
+    function scrollToQuestion(num) {
+      const el = document.getElementById(`q-card-${num}`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    function openImageModal(src) {
+      document.getElementById('modal-img-element').src = src;
+      document.getElementById('image-modal').classList.add('active');
+    }
+
+    function closeImageModal() {
+      document.getElementById('image-modal').classList.remove('active');
+    }
+
+    let currentWorkspaceMode = 'capture';
+
+    function setWorkspaceMode(mode) {
+      currentWorkspaceMode = mode;
+      document.getElementById('btn-mode-capture').classList.toggle('active', mode === 'capture');
+      document.getElementById('btn-mode-data').classList.toggle('active', mode === 'data');
+
+      document.querySelectorAll('.full-capture-view').forEach(el => {
+        el.style.display = mode === 'capture' ? 'block' : 'none';
+      });
+      document.querySelectorAll('.cropped-data-view').forEach(el => {
+        el.style.display = mode === 'data' ? 'block' : 'none';
+      });
+    }
+
+    function autoCropCanvas(imgUrl, canvasEl) {
+      if (!canvasEl) return;
+      const img = new Image();
+      img.crossOrigin = "Anonymous";
+      img.onload = function() {
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = img.width;
+        tempCanvas.height = img.height;
+        const ctx = tempCanvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+
+        let imgData;
+        try {
+          imgData = ctx.getImageData(0, 0, img.width, img.height);
+        } catch(e) {
+          canvasEl.parentElement.innerHTML = `<img src="${imgUrl}" style="max-width:100%; max-height:480px; object-fit:contain;">`;
+          return;
+        }
+
+        const data = imgData.data;
+        const w = img.width;
+        const h = img.height;
+        const stepX = 2;
+        const stepY = 2;
+
+        // 1. Calculate white pixel density histogram per column (x-axis)
+        const colWhiteCount = new Int32Array(w);
+        for (let x = 0; x < w; x += stepX) {
+          let count = 0;
+          for (let y = 0; y < h; y += stepY) {
+            const idx = (y * w + x) * 4;
+            if (data[idx] > 200 && data[idx+1] > 200 && data[idx+2] > 200) {
+              count++;
+            }
+          }
+          colWhiteCount[x] = count;
+          if (stepX > 1 && x + 1 < w) colWhiteCount[x+1] = count;
+        }
+
+        const thresholdHeight = (h / stepY) * 0.15;
+        let segments = [];
+        let currentSeg = null;
+
+        for (let x = 0; x < w; x++) {
+          if (colWhiteCount[x] >= thresholdHeight) {
+            if (!currentSeg) {
+              currentSeg = { startX: x, endX: x, totalWhite: 0 };
+            }
+            currentSeg.endX = x;
+            currentSeg.totalWhite += colWhiteCount[x];
+          } else {
+            if (currentSeg) {
+              if ((currentSeg.endX - currentSeg.startX) > w * 0.15) {
+                segments.push(currentSeg);
+              }
+              currentSeg = null;
+            }
+          }
+        }
+        if (currentSeg && (currentSeg.endX - currentSeg.startX) > w * 0.15) {
+          segments.push(currentSeg);
+        }
+
+        let bestSeg = null;
+        if (segments.length > 0) {
+          segments.sort((a, b) => b.totalWhite - a.totalWhite);
+          bestSeg = segments[0];
+        }
+
+        let minX = 0, maxX = w;
+        if (bestSeg) {
+          minX = bestSeg.startX;
+          maxX = bestSeg.endX;
+        } else {
+          minX = Math.floor(w * 0.05);
+          maxX = Math.floor(w * 0.95);
+        }
+
+        // 2. Row bounds within best x-segment (strictly require > 50% white pixels across the segment to ignore top browser bar and dark area)
+        const segWidth = (maxX - minX);
+        const requiredWhitePerRow = Math.floor((segWidth / stepX) * 0.50);
+
+        let minY = -1;
+        let maxY = -1;
+
+        for (let y = 0; y < h; y += stepY) {
+          let whiteInRow = 0;
+          for (let x = minX; x <= maxX; x += stepX) {
+            const idx = (y * w + x) * 4;
+            if (data[idx] > 220 && data[idx+1] > 220 && data[idx+2] > 220) {
+              whiteInRow++;
+            }
+          }
+          if (whiteInRow >= requiredWhitePerRow) {
+            if (minY === -1) minY = y;
+            maxY = y;
+          }
+        }
+
+        // Fallback if no 50% white row was found (relax to 30%)
+        if (minY === -1) {
+          const relaxedThreshold = Math.floor((segWidth / stepX) * 0.30);
+          for (let y = 0; y < h; y += stepY) {
+            let whiteInRow = 0;
+            for (let x = minX; x <= maxX; x += stepX) {
+              const idx = (y * w + x) * 4;
+              if (data[idx] > 200 && data[idx+1] > 200 && data[idx+2] > 200) {
+                whiteInRow++;
+              }
+            }
+            if (whiteInRow >= relaxedThreshold) {
+              if (minY === -1) minY = y;
+              maxY = y;
+            }
+          }
+        }
+
+        if (minY === -1 || (maxY - minY) < 50) {
+          minY = Math.floor(h * 0.05);
+          maxY = Math.floor(h * 0.95);
+        }
+
+        const pad = 2;
+        const cropX = Math.max(0, minX - pad);
+        const cropY = Math.max(0, minY - pad);
+        const cropW = Math.min(w - cropX, (maxX - minX) + pad * 2);
+        const cropH = Math.min(h - cropY, (maxY - minY) + pad * 2);
+
+        canvasEl.width = cropW;
+        canvasEl.height = cropH;
+        const cctx = canvasEl.getContext('2d');
+        cctx.drawImage(img, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
+      };
+      img.src = imgUrl;
+    }
+
+    function sendChatMessage() {
+      const input = document.getElementById('chat-text-input');
+      const val = input.value.trim();
+      if (!val) return;
+
+      const stream = document.getElementById('chat-stream-list');
+      const bubble = document.createElement('div');
+      bubble.className = 'chat-bubble answer-summary';
+      bubble.innerText = val;
+      stream.appendChild(bubble);
+
+      saveNoteText(val);
+      input.value = '';
+      showToast('Đã gửi tin nhắn');
+    }
+
+    function copyAllAnswers() {
+      const noteInput = document.querySelector('[id^="note-input-"]');
+      if (noteInput && noteInput.value) {
+        navigator.clipboard.writeText(noteInput.value);
+        showToast('Đã sao chép đáp án vào Clipboard!');
+      } else {
+        showToast('Chưa có đáp án để copy');
+      }
+    }
+
+    async function downloadAllImages() {
+      if (!currentKey || !currentScreenshots || currentScreenshots.length === 0) {
+        showToast('Chưa có ảnh chụp nào để tải!');
+        return;
+      }
+
+      showToast('⏳ Đang đóng gói ZIP ảnh Data (đã cắt)...');
+
+      const croppedDataList = [];
+      for (let i = 0; i < currentScreenshots.length; i++) {
+        const qNum = i + 1;
+        const canvasEl = document.getElementById(`crop-canvas-${qNum}`);
+        if (canvasEl) {
+          try {
+            const dataUrl = canvasEl.toDataURL('image/jpeg', 0.92);
+            croppedDataList.push({ name: `Anh_${qNum}_Data.jpg`, data: dataUrl });
+          } catch(e) { }
+        }
+      }
+
+      if (croppedDataList.length === 0) {
+        window.location.href = `/api/download-zip/${encodeURIComponent(currentKey)}`;
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/download-cropped-zip', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ key: currentKey, images: croppedDataList })
+        });
+
+        if (res.ok) {
+          const blob = await res.blob();
+          const downloadUrl = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = downloadUrl;
+          a.download = `screenshots_data_${currentKey}.zip`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(downloadUrl);
+          showToast('✅ Đã tải về file ZIP ảnh Data (đã cắt)!');
+        } else {
+          window.location.href = `/api/download-zip/${encodeURIComponent(currentKey)}`;
+        }
+      } catch(err) {
+        window.location.href = `/api/download-zip/${encodeURIComponent(currentKey)}`;
+      }
+    }
+
+    function clearRoomMessages() {
+      document.getElementById('chat-stream-list').innerHTML = '';
+      showToast('Đã xóa nhật ký');
+    }
+
+    function triggerNotification() {
+      showToast('🔔 Đã phát tín hiệu thông báo');
+    }
+
+    // Init
+    loadActiveRooms();
+    setInterval(loadActiveRooms, 4000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+{
+  "keys": [
+    {
+      "key": "MINITECH-1B0A-9BFE-7FFD",
+      "createdAt": "2026-07-24T17:31:29.835Z",
+      "status": "active",
+      "durationHours": 720,
+      "activatedAt": "2026-08-06T17:50:45.912Z",
+      "expiresAt": "2026-09-05T17:50:45.912Z"
+    },
+    {
+      "key": "MINITECH-7F62-2270-EA6F",
+      "createdAt": "2026-07-24T17:42:31.515Z",
+      "status": "active",
+      "durationHours": 720,
+      "activatedAt": null,
+      "expiresAt": null
+    },
+    {
+      "key": "MINITECH-4F8E-B3EE-32D1",
+      "createdAt": "2026-07-24T17:49:34.478Z",
+      "status": "active",
+      "durationHours": 720,
+      "activatedAt": null,
+      "expiresAt": null
+    },
+    {
+      "key": "MINITECH-4E92-0E1F-5A13",
+      "createdAt": "2026-08-06T11:33:58.556Z",
+      "status": "active",
+      "durationHours": 720,
+      "activatedAt": "2026-08-06T13:46:22.007Z",
+      "expiresAt": "2026-09-05T13:46:22.007Z"
+    },
+    {
+      "key": "MINITECH-40F3-8B4B-60B5",
+      "createdAt": "2026-08-06T17:51:30.089Z",
+      "status": "active",
+      "durationHours": 1,
+      "activatedAt": null,
+      "expiresAt": null
+    },
+    {
+      "key": "MINITECH-0D96-B1D6-3FE7",
+      "createdAt": "2026-08-06T17:51:31.415Z",
+      "status": "active",
+      "durationHours": 1,
+      "activatedAt": null,
+      "expiresAt": null
+    },
+    {
+      "key": "MINITECH-7B4A-5C84-D1B5",
+      "createdAt": "2026-08-06T17:51:32.494Z",
+      "status": "active",
+      "durationHours": 1,
+      "activatedAt": null,
+      "expiresAt": null
+    },
+    {
+      "key": "MINITECH-F6B0-AFC9-940B",
+      "createdAt": "2026-08-06T17:51:33.433Z",
+      "status": "active",
+      "durationHours": 1,
+      "activatedAt": "2026-08-06T18:09:01.960Z",
+      "expiresAt": "2026-08-06T19:09:01.960Z",
+      "hwid": "697DEC5635F8E8DF"
+    },
+    {
+      "key": "MINITECH-9F56-093C-D5EE",
+      "createdAt": "2026-08-06T17:51:34.223Z",
+      "status": "active",
+      "durationHours": 1,
+      "activatedAt": "2026-08-06T17:52:16.799Z",
+      "expiresAt": "2026-08-06T18:52:16.799Z"
+    }
+  ],
+  "screenshots": [
+    {
+      "id": "696fb12d-1abf-48e5-9ca9-725c49defd6a",
+      "key": "MINITECH-4E92-0E1F-5A13",
+      "filename": "screenshot_1786037932065_fdd1db5a.jpg",
+      "note": "",
+      "question": "Câu 1",
+      "createdAt": "2026-08-06T17:38:52.066Z"
+    },
+    {
+      "id": "7b508e4c-afa0-4db5-b833-581b7b814cd6",
+      "key": "MINITECH-F6B0-AFC9-940B",
+      "filename": "screenshot_1786039755102_184588a4.jpg",
+      "url": "/uploads/screenshot_1786039755102_184588a4.jpg",
+      "note": "",
+      "question": "Câu 1",
+      "createdAt": "2026-08-06T18:09:16.830Z"
+    },
+    {
+      "id": "8824806b-9b11-470a-aaee-43c9c65d4175",
+      "key": "MINITECH-F6B0-AFC9-940B",
+      "filename": "screenshot_1786039778459_0ee2758a.jpg",
+      "url": "/uploads/screenshot_1786039778459_0ee2758a.jpg",
+      "note": "",
+      "question": "Câu 2",
+      "createdAt": "2026-08-06T18:09:39.869Z"
+    }
+  ],
+  "notes": {
+    "MINITECH-4E92-0E1F-5A13": "[Thí sinh]: alo\nalo\nádsad\nádas\ná\ndá\nd\nád\ná\náda\nsd\ná\nd\n[Thí sinh]: alo\n[Thí sinh]: alo",
+    "MINITECH-F6B0-AFC9-940B": "[Thí sinh]: alo"
+  }
+}
