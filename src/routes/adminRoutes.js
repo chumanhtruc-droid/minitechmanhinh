@@ -8,9 +8,14 @@ const { requireAdmin } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// Protected admin panel (main index.html)
-router.get('/', requireAdmin, (req, res) => {
+// Public root landing page (index.html)
+router.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '..', '..', 'public', 'index.html'));
+});
+
+// Protected admin panel (admin.html)
+router.get('/admin', requireAdmin, (req, res) => {
+  res.sendFile(path.join(__dirname, '..', '..', 'public', 'admin.html'));
 });
 
 // Admin: Generate a new key
