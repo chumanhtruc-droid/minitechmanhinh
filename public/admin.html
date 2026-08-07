@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bảng Quản Lý Admin — MINITECH</title>
+  <meta name="description" content="Quản lý Key và Phiên Thi MINITECH">
+  <link rel="icon" type="image/png" href="/logo.png">
+  <link rel="shortcut icon" type="image/png" href="/logo.png">
+  <link rel="apple-touch-icon" href="/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #07090e;
+      --bg-panel: #0d121f;
+      --bg-card: #131b2e;
+      --bg-input: #1a243b;
+      --border-color: rgba(59, 130, 246, 0.18);
+      --border-focus: #0088ff;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-blue: #0088ff;
+      --accent-gradient: linear-gradient(135deg, #0088ff 0%, #0055ff 100%);
+      --accent-glow: rgba(0, 136, 255, 0.35);
+      --success-green: #10b981;
+      --danger-red: #ef4444;
+      --radius-md: 14px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-image: 
+        radial-gradient(circle at 15% 20%, rgba(0, 136, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(0, 85, 255, 0.06) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.5) 0%, transparent 100%);
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 24px 24px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    header {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 2rem;
+      background: rgba(7, 9, 14, 0.95);
+      border-bottom: 1px solid var(--border-color);
+      backdrop-filter: blur(16px);
+      height: 60px;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: white;
+    }
+
+    .brand-logo-img {
+      height: 36px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 0 10px rgba(0, 136, 255, 0.5));
+    }
+
+    .brand-logo-text {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      color: white;
+      text-transform: uppercase;
+    }
+
+    .nav-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: white;
+      padding: 0.45rem 1rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover {
+      background: rgba(0, 136, 255, 0.2);
+      border-color: var(--accent-blue);
+    }
+
+    .btn-logout {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #ef4444;
+    }
+
+    .btn-logout:hover {
+      background: rgba(239, 68, 68, 0.3);
+    }
+
+    main {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      width: 100%;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 2rem;
+    }
+
+    @media (max-width: 900px) {
+      main { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      color: white;
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .form-input:focus, .form-select:focus {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 2px var(--accent-glow);
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--accent-gradient);
+      color: white;
+      border: none;
+      padding: 0.85rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(0, 136, 255, 0.4);
+      transition: all 0.2s;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(0, 136, 255, 0.6);
+    }
+
+    .generated-box {
+      margin-top: 1.25rem;
+      padding: 1rem;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px dashed var(--success-green);
+      border-radius: 8px;
+      display: none;
+    }
+
+    .generated-box.show { display: block; }
+
+    .key-code {
+      font-family: monospace;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--success-green);
+      letter-spacing: 0.05em;
+      user-select: all;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th {
+      padding: 0.85rem 1rem;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    td {
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      font-size: 0.875rem;
+    }
+
+    .badge {
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .badge-active { background: rgba(16, 185, 129, 0.15); color: var(--success-green); }
+    .badge-expired { background: rgba(239, 68, 68, 0.15); color: var(--danger-red); }
+
+    .action-btn-small {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: white;
+      padding: 0.35rem 0.65rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .action-btn-small:hover {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: var(--danger-red);
+      color: var(--danger-red);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="/" class="brand-logo">
+      <img src="/logo.png" alt="MINITECH Logo" class="brand-logo-img">
+      <span class="brand-logo-text">MINITECH ADMIN</span>
+    </a>
+
+    <div style="display: flex; gap: 1rem;">
+      <a href="/support.html" class="nav-btn">
+        💬 Phòng Trợ Giúp Thi
+      </a>
+      <button onclick="logout()" class="nav-btn btn-logout">
+        🔒 Đăng xuất
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Left Card: Generate Key -->
+    <div class="card">
+      <h2 class="card-title">🔑 Tạo Key Kích Hoạt Mới</h2>
+      <form id="gen-form" onsubmit="generateKey(event)">
+        <div class="form-group">
+          <label class="form-label">Thời hạn Key</label>
+          <select id="duration" class="form-select">
+            <option value="1">1 Giờ (Dùng thử)</option>
+            <option value="24" selected>24 Giờ (1 Ngày)</option>
+            <option value="72">72 Giờ (3 Ngày)</option>
+            <option value="720">720 Giờ (30 Ngày)</option>
+            <option value="0">Vĩnh viễn (Không giới hạn)</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-submit">⚡ Tạo Key Ngay</button>
+      </form>
+
+      <div id="gen-result" class="generated-box">
+        <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.4rem;">Mã Key vừa tạo:</div>
+        <div id="key-output" class="key-code"></div>
+      </div>
+    </div>
+
+    <!-- Right Card: Active Keys Table -->
+    <div class="card">
+      <h2 class="card-title">📋 Danh Sách Key & Quản Lý HWID</h2>
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Mã Key</th>
+              <th>Trạng thái</th>
+              <th>Thời hạn còn lại</th>
+              <th>HWID Đã Khóa</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="keys-tbody">
+            <tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Đang tải danh sách Key...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    async function loadKeys() {
+      try {
+        const res = await fetch('/api/keys');
+        const data = await res.json();
+        const tbody = document.getElementById('keys-tbody');
+        if (!data.success || !data.keys || data.keys.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Chưa có Key nào được tạo.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = data.keys.map(k => `
+          <tr>
+            <td style="font-family:monospace; font-weight:700; color:var(--accent-blue);">${k.key}</td>
+            <td><span class="badge ${k.status === 'active' ? 'badge-active' : 'badge-expired'}">${k.status}</span></td>
+            <td>${k.remainingTimeText || (k.durationHours === 0 ? 'Vĩnh viễn' : 'Chưa kích hoạt')}</td>
+            <td style="font-family:monospace; font-size:0.75rem; color:${k.hwid ? '#10b981' : 'var(--text-muted)'};">${k.hwid || 'Chưa gắn'}</td>
+            <td>
+              <button onclick="deleteKey('${k.key}')" class="action-btn-small">Xóa Key</button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.error("Lỗi tải danh sách key:", err);
+      }
+    }
+
+    async function generateKey(e) {
+      e.preventDefault();
+      const duration_hours = document.getElementById('duration').value;
+      try {
+        const res = await fetch('/api/generate-key', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ duration_hours })
+        });
+        const data = await res.json();
+        if (data.success) {
+          document.getElementById('key-output').textContent = data.key;
+          document.getElementById('gen-result').classList.add('show');
+          loadKeys();
+        }
+      } catch (err) {
+        alert("Lỗi tạo key!");
+      }
+    }
+
+    async function deleteKey(key) {
+      if (!confirm(`Bạn có chắc muốn xóa Key ${key}?`)) return;
+      try {
+        await fetch(`/api/keys/${key}`, { method: 'DELETE' });
+        loadKeys();
+      } catch (err) {
+        alert("Lỗi xóa key!");
+      }
+    }
+
+    async function logout() {
+      await fetch('/api/logout', { method: 'POST' });
+      window.location.href = '/login.html';
+    }
+
+    loadKeys();
+    setInterval(loadKeys, 5000);
+  </script>
+</body>
+</html>
