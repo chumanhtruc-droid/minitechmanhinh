@@ -30,7 +30,7 @@ function parseCookies(cookieHeader = '') {
 function requireAdmin(req, res, next) {
   const cookies = parseCookies(req.headers.cookie);
   if (isValidSession(cookies.admin_token)) return next();
-  res.redirect('/login');
+  res.redirect('/login.html');
 }
 
 module.exports = {

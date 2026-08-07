@@ -16,6 +16,10 @@ router.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, '..', '..', 'public', 'login.html'));
 });
 
+router.get('/login.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', '..', 'public', 'login.html'));
+});
+
 // Login API
 router.post('/api/login', (req, res) => {
   const { username, password } = req.body;
