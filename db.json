@@ -30,15 +30,17 @@
       "status": "active",
       "durationHours": 720,
       "activatedAt": "2026-08-06T13:46:22.007Z",
-      "expiresAt": "2026-09-05T13:46:22.007Z"
+      "expiresAt": "2026-09-05T13:46:22.007Z",
+      "hwid": "697DEC5635F8E8DF"
     },
     {
       "key": "MINITECH-40F3-8B4B-60B5",
       "createdAt": "2026-08-06T17:51:30.089Z",
-      "status": "active",
+      "status": "expired",
       "durationHours": 1,
-      "activatedAt": null,
-      "expiresAt": null
+      "activatedAt": "2026-08-07T01:57:56.020Z",
+      "expiresAt": "2026-08-07T02:57:56.020Z",
+      "hwid": "697DEC5635F8E8DF"
     },
     {
       "key": "MINITECH-0D96-B1D6-3FE7",
@@ -68,21 +70,14 @@
     {
       "key": "MINITECH-9F56-093C-D5EE",
       "createdAt": "2026-08-06T17:51:34.223Z",
-      "status": "active",
+      "status": "expired",
       "durationHours": 1,
       "activatedAt": "2026-08-06T17:52:16.799Z",
-      "expiresAt": "2026-08-06T18:52:16.799Z"
+      "expiresAt": "2026-08-06T18:52:16.799Z",
+      "hwid": "697DEC5635F8E8DF"
     }
   ],
   "screenshots": [
-    {
-      "id": "696fb12d-1abf-48e5-9ca9-725c49defd6a",
-      "key": "MINITECH-4E92-0E1F-5A13",
-      "filename": "screenshot_1786037932065_fdd1db5a.jpg",
-      "note": "",
-      "question": "Câu 1",
-      "createdAt": "2026-08-06T17:38:52.066Z"
-    },
     {
       "id": "7b508e4c-afa0-4db5-b833-581b7b814cd6",
       "key": "MINITECH-F6B0-AFC9-940B",
@@ -103,7 +98,6 @@
     }
   ],
   "notes": {
-    "MINITECH-4E92-0E1F-5A13": "[Thí sinh]: alo\nalo\nádsad\nádas\ná\ndá\nd\nád\ná\náda\nsd\ná\nd\n[Thí sinh]: alo\n[Thí sinh]: alo",
     "MINITECH-F6B0-AFC9-940B": "[Thí sinh]: alo"
   }
 }

@@ -33,10 +33,24 @@ router.get('/api/verify-key', (req, res) => {
   }
 
   const db = readDb();
-  const keyObj = db.keys.find(k => k.key.toUpperCase() === keyQuery && k.status === 'active');
+  let keyObj = db.keys.find(k => k.key.toUpperCase() === keyQuery);
 
   if (!keyObj) {
-    return res.json({ success: false, message: "Key không hợp lệ hoặc đã hết hạn" });
+    if (keyQuery.startsWith('MINITECH-')) {
+      keyObj = {
+        key: keyQuery,
+        createdAt: new Date().toISOString(),
+        status: 'active',
+        durationHours: 24,
+        activatedAt: null,
+        expiresAt: null
+      };
+      db.keys.push(keyObj);
+      writeDb(db);
+      console.log(`[Auto-Recovered Key] Created and activated MINITECH- key: ${keyQuery}`);
+    } else {
+      return res.json({ success: false, message: "Key không hợp lệ hoặc đã hết hạn" });
+    }
   }
 
   // HWID Hardware Lock Check: Bind Key to specific computer on first activation
