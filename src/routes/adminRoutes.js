@@ -59,6 +59,7 @@ router.get('/api/keys', (req, res) => {
       else if (h === 24) durationText = "24 Giờ (1 Ngày)";
       else if (h === 72) durationText = "72 Giờ (3 Ngày)";
       else if (h === 720) durationText = "720 Giờ (30 Ngày)";
+      else if (h === 2880) durationText = "2880 Giờ (120 Ngày)";
       else if (h > 0) durationText = `${h} Giờ`;
 
       let remainingText = "Chưa kích hoạt";
@@ -104,7 +105,14 @@ router.get('/api/keys', (req, res) => {
     item.screenshotCount = (item.screenshotCount || 0) + 1;
   });
 
-  res.json({ success: true, keys: Array.from(keyMap.values()) });
+  // Sort keys descending by createdAt (newest keys at the top)
+  const sortedKeys = Array.from(keyMap.values()).sort((a, b) => {
+    const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+    const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+    return timeB - timeA;
+  });
+
+  res.json({ success: true, keys: sortedKeys });
 });
 
 // Helper function to delete key and its assets case-insensitively

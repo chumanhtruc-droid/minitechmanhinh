@@ -303,6 +303,7 @@
             <option value="24" selected>24 Giờ (1 Ngày)</option>
             <option value="72">72 Giờ (3 Ngày)</option>
             <option value="720">720 Giờ (30 Ngày)</option>
+            <option value="2880">2880 Giờ (120 Ngày)</option>
             <option value="0">Vĩnh viễn (Không giới hạn)</option>
           </select>
         </div>
@@ -319,6 +320,18 @@
     <!-- Right Card: Active Keys Table -->
     <div class="card">
       <h2 class="card-title">📋 Danh Sách Key & Quản Lý HWID</h2>
+      
+      <!-- Category Filter Tabs -->
+      <div class="filter-tabs" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.25rem;">
+        <button class="filter-btn active" onclick="setFilter('all', this)">📌 Tất cả Key</button>
+        <button class="filter-btn" onclick="setFilter('1', this)">⚡ 1 Giờ</button>
+        <button class="filter-btn" onclick="setFilter('24', this)">📅 1 Ngày</button>
+        <button class="filter-btn" onclick="setFilter('72', this)">🚀 3 Ngày</button>
+        <button class="filter-btn" onclick="setFilter('720', this)">💎 30 Ngày</button>
+        <button class="filter-btn" onclick="setFilter('2880', this)">👑 120 Ngày</button>
+        <button class="filter-btn" onclick="setFilter('0', this)">♾️ Vĩnh Viễn</button>
+      </div>
+
       <div style="overflow-x: auto;">
         <table>
           <thead>
@@ -340,28 +353,55 @@
   </main>
 
   <script>
+    let currentFilter = 'all';
+    let allKeysCache = [];
+
+    function setFilter(filterVal, btnEl) {
+      currentFilter = filterVal;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+      renderKeysTable();
+    }
+
+    function renderKeysTable() {
+      const tbody = document.getElementById('keys-tbody');
+      let filtered = allKeysCache;
+      if (currentFilter !== 'all') {
+        const filterHours = parseInt(currentFilter, 10);
+        filtered = allKeysCache.filter(k => k.durationHours === filterHours);
+      }
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">Không có Key nào trong mục này.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(k => `
+        <tr>
+          <td style="font-family:monospace; font-weight:700; color:var(--accent-blue);">${k.key}</td>
+          <td><span style="background:rgba(0,136,255,0.15); border:1px solid rgba(0,136,255,0.3); color:#38bdf8; padding:0.2rem 0.65rem; border-radius:6px; font-weight:700; font-size:0.75rem;">${k.durationText || 'Vĩnh viễn'}</span></td>
+          <td><span class="badge ${k.status === 'active' ? 'badge-active' : 'badge-expired'}">${k.status}</span></td>
+          <td>${k.remainingTimeText || (k.durationHours === 0 ? 'Vĩnh viễn' : 'Chưa kích hoạt')}</td>
+          <td style="font-family:monospace; font-size:0.75rem; color:${k.hwid ? '#10b981' : 'var(--text-muted)'};">${k.hwid || 'Chưa gắn'}</td>
+          <td>
+            <button onclick="deleteKey('${k.key}')" class="action-btn-small">Xóa Key</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
     async function loadKeys() {
       try {
         const res = await fetch('/api/keys');
         const data = await res.json();
-        const tbody = document.getElementById('keys-tbody');
-        if (!data.success || !data.keys || data.keys.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">Chưa có Key nào được tạo.</td></tr>';
-          return;
+        if (data.success && data.keys) {
+          allKeysCache = data.keys;
+          renderKeysTable();
         }
-
-        tbody.innerHTML = data.keys.map(k => `
-          <tr>
-            <td style="font-family:monospace; font-weight:700; color:var(--accent-blue);">${k.key}</td>
-            <td><span style="background:rgba(0,136,255,0.15); border:1px solid rgba(0,136,255,0.3); color:#38bdf8; padding:0.2rem 0.65rem; border-radius:6px; font-weight:700; font-size:0.75rem;">${k.durationText || 'Vĩnh viễn'}</span></td>
-            <td><span class="badge ${k.status === 'active' ? 'badge-active' : 'badge-expired'}">${k.status}</span></td>
-            <td>${k.remainingTimeText || (k.durationHours === 0 ? 'Vĩnh viễn' : 'Chưa kích hoạt')}</td>
-            <td style="font-family:monospace; font-size:0.75rem; color:${k.hwid ? '#10b981' : 'var(--text-muted)'};">${k.hwid || 'Chưa gắn'}</td>
-            <td>
-              <button onclick="deleteKey('${k.key}')" class="action-btn-small">Xóa Key</button>
-            </td>
-          </tr>
-        `).join('');
+      } catch (err) {
+        console.error("Lỗi tải danh sách key:", err);
+      }
+    }
       } catch (err) {
         console.error("Lỗi tải danh sách key:", err);
       }
