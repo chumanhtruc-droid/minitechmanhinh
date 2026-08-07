@@ -390,10 +390,19 @@
     async function deleteKey(key) {
       if (!confirm(`Bạn có chắc muốn xóa Key ${key}?`)) return;
       try {
-        await fetch(`/api/keys/${key}`, { method: 'DELETE' });
-        loadKeys();
+        const res = await fetch('/api/delete-key', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ key })
+        });
+        const data = await res.json();
+        if (data.success) {
+          loadKeys();
+        } else {
+          alert(data.message || "Không thể xóa Key!");
+        }
       } catch (err) {
-        alert("Lỗi xóa key!");
+        alert("Lỗi kết nối xóa Key!");
       }
     }
 

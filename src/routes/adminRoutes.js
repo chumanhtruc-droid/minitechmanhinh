@@ -107,31 +107,41 @@ router.get('/api/keys', (req, res) => {
   res.json({ success: true, keys: Array.from(keyMap.values()) });
 });
 
-// Admin: Delete a key
-router.post('/api/delete-key', (req, res) => {
-  const { key } = req.body;
-  if (!key) {
-    return res.status(400).json({ success: false, message: "Key parameter missing" });
+// Helper function to delete key and its assets case-insensitively
+function deleteKeyFromDb(key) {
+  if (!key) return false;
+  const keyNorm = key.trim().toUpperCase();
+  const db = readDb();
+  db.keys = (db.keys || []).filter(k => k.key.toUpperCase() !== keyNorm);
+  const screenshotsToDelete = (db.screenshots || []).filter(s => (s.key || '').toUpperCase() === keyNorm);
+  db.screenshots = (db.screenshots || []).filter(s => (s.key || '').toUpperCase() !== keyNorm);
+  if (db.notes) {
+    delete db.notes[keyNorm];
   }
   
-  const db = readDb();
-  db.keys = db.keys.filter(k => k.key !== key);
-  const screenshotsToDelete = db.screenshots.filter(s => s.key === key);
-  db.screenshots = db.screenshots.filter(s => s.key !== key);
-  
-  // Delete physical files
   screenshotsToDelete.forEach(s => {
     const filePath = path.join(UPLOADS_DIR, s.filename);
     if (fs.existsSync(filePath)) {
-      try {
-        fs.unlinkSync(filePath);
-      } catch (err) {
-        console.error("Error deleting file:", filePath, err);
-      }
+      try { fs.unlinkSync(filePath); } catch (err) { }
     }
   });
 
   writeDb(db);
+  return true;
+}
+
+// Admin: Delete a key
+router.post('/api/delete-key', (req, res) => {
+  const { key } = req.body;
+  if (!key) return res.status(400).json({ success: false, message: "Key parameter missing" });
+  deleteKeyFromDb(key);
+  res.json({ success: true, message: "Key and associated screenshots deleted" });
+});
+
+router.delete('/api/keys/:key', (req, res) => {
+  const key = req.params.key;
+  if (!key) return res.status(400).json({ success: false, message: "Key parameter missing" });
+  deleteKeyFromDb(key);
   res.json({ success: true, message: "Key and associated screenshots deleted" });
 });
 
