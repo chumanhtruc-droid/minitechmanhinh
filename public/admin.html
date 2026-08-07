@@ -446,7 +446,6 @@
           document.getElementById('key-output').textContent = data.key;
           document.getElementById('gen-result').style.display = 'block';
           await loadKeys();
-          alert(`🎉 Tạo thành công Key: ${data.key}`);
         } else {
           alert("Lỗi: " + (data.message || "Không tạo được Key"));
         }
