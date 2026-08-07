@@ -4,21 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Đăng nhập Admin – Minitech</title>
-  <meta name="description" content="Trang đăng nhập quản trị viên Winstat">
+  <meta name="description" content="Trang đăng nhập quản trị viên Minitech">
   <link rel="icon" type="image/png" href="/logo.png">
   <link rel="shortcut icon" type="image/png" href="/logo.png">
   <link rel="apple-touch-icon" href="/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <style>
     :root {
       --bg: #07090e;
-      --card: rgba(13, 18, 31, 0.9);
+      --card: rgba(13, 18, 31, 0.85);
       --border: rgba(59, 130, 246, 0.2);
       --accent: #0088ff;
-      --accent-glow: rgba(0, 136, 255, 0.35);
+      --accent-gradient: linear-gradient(135deg, #0088ff 0%, #0055ff 100%);
+      --accent-glow: rgba(0, 136, 255, 0.4);
       --success: #10b981;
       --danger: #ef4444;
       --text: #f8fafc;
@@ -28,39 +29,56 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Plus Jakarta Sans', sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      background-image:
-        radial-gradient(ellipse at 15% 50%, rgba(99,102,241,0.12) 0%, transparent 55%),
-        radial-gradient(ellipse at 85% 20%, rgba(139,92,246,0.09) 0%, transparent 55%),
-        radial-gradient(ellipse at 50% 100%, rgba(99,102,241,0.06) 0%, transparent 50%);
+      overflow: hidden;
+      position: relative;
     }
 
-    /* Animated background grid */
-    body::before {
-      content: '';
+    /* Background Particle Canvas */
+    #bg-canvas {
       position: fixed;
       inset: 0;
-      background-image:
-        linear-gradient(rgba(99,102,241,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(99,102,241,0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
+      width: 100%;
+      height: 100%;
       pointer-events: none;
-      z-index: 0;
+      z-index: 1;
+    }
+
+    /* Ambient Grid Overlay */
+    .grid-overlay {
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Mouse Cursor Spotlight Glow */
+    .cursor-spotlight {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0, 136, 255, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 3;
+      transform: translate(-50%, -50%);
     }
 
     .login-wrapper {
       position: relative;
-      z-index: 1;
+      z-index: 10;
       width: 100%;
-      max-width: 420px;
-      padding: 1rem;
-      animation: slideUp 0.5s cubic-bezier(0.4,0,0.2,1) both;
+      max-width: 440px;
+      padding: 1.5rem;
+      animation: slideUp 0.8s cubic-bezier(0.4,0,0.2,1) both;
     }
 
     @keyframes slideUp {
@@ -73,204 +91,229 @@
       flex-direction: column;
       align-items: center;
       gap: 0.75rem;
-      margin-bottom: 2.5rem;
+      margin-bottom: 2rem;
     }
 
-    .logo-icon {
-      width: 60px; height: 60px;
-      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-      border-radius: 18px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.75rem; font-weight: 800; color: white;
-      box-shadow: 0 0 40px var(--accent-glow), 0 8px 32px rgba(0,0,0,0.4);
+    .logo-img {
+      width: 75px;
+      height: 75px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 25px rgba(0, 136, 255, 0.9)) drop-shadow(0 0 10px rgba(56, 189, 248, 0.6));
+      animation: float 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-8px); }
     }
 
     .logo-row h1 {
-      font-size: 1.5rem; font-weight: 800;
-      background: linear-gradient(135deg, #fff 40%, #a5b4fc);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      letter-spacing: -0.02em;
+      font-size: 1.6rem;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      background: linear-gradient(90deg, #ffffff 0%, #38bdf8 50%, #ffffff 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: textShimmer 6s linear infinite;
+    }
+
+    @keyframes textShimmer {
+      0% { background-position: 0% center; }
+      100% { background-position: 200% center; }
     }
 
     .logo-row p {
-      font-size: 0.85rem; color: var(--muted);
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 500;
     }
 
     .card {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 20px;
-      padding: 2rem;
-      backdrop-filter: blur(20px);
-      box-shadow: 0 25px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+      padding: 2.25rem;
+      backdrop-filter: blur(24px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 40px rgba(0, 136, 255, 0.1);
     }
 
     .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.45rem;
-      margin-bottom: 1.25rem;
+      margin-bottom: 1.35rem;
     }
 
     label {
-      font-size: 0.78rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
+      display: block;
+      font-size: 0.825rem;
+      font-weight: 700;
       color: var(--muted);
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
     }
 
     .input-wrapper {
       position: relative;
+      display: flex;
+      align-items: center;
     }
 
     .input-icon {
       position: absolute;
-      left: 0.9rem;
-      top: 50%;
-      transform: translateY(-50%);
+      left: 1rem;
       color: var(--muted);
+      display: flex;
+      align-items: center;
       pointer-events: none;
+      transition: color 0.2s;
     }
 
     input[type="text"],
     input[type="password"] {
       width: 100%;
-      padding: 0.8rem 0.9rem 0.8rem 2.6rem;
-      background: rgba(255,255,255,0.05);
+      background: rgba(15, 23, 42, 0.6);
       border: 1px solid var(--border);
       border-radius: 12px;
-      color: var(--text);
-      font-family: inherit;
+      padding: 0.85rem 1rem 0.85rem 2.8rem;
+      color: white;
       font-size: 0.95rem;
-      transition: all 0.2s;
-      outline: none;
+      font-family: inherit;
+      transition: all 0.25s;
     }
 
     input:focus {
+      outline: none;
       border-color: var(--accent);
-      background: rgba(99,102,241,0.08);
-      box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+      box-shadow: 0 0 0 3px rgba(0, 136, 255, 0.25);
+      background: rgba(15, 23, 42, 0.9);
     }
 
-    input::placeholder { color: rgba(156,163,175,0.5); }
+    input:focus + .input-icon,
+    .input-wrapper:focus-within .input-icon {
+      color: var(--accent);
+    }
 
     .toggle-pw {
       position: absolute;
-      right: 0.9rem;
-      top: 50%;
-      transform: translateY(-50%);
+      right: 0.85rem;
       background: none;
       border: none;
-      cursor: pointer;
       color: var(--muted);
-      padding: 0;
+      cursor: pointer;
+      padding: 0.25rem;
       display: flex;
       align-items: center;
       transition: color 0.2s;
     }
-    .toggle-pw:hover { color: var(--text); }
+
+    .toggle-pw:hover { color: white; }
 
     .btn-login {
       width: 100%;
-      padding: 0.9rem;
-      background: linear-gradient(135deg, #0088ff, #0055ff);
+      background: var(--accent-gradient);
+      color: white;
       border: none;
       border-radius: 12px;
-      color: white;
+      padding: 0.9rem;
+      font-size: 0.95rem;
+      font-weight: 800;
       font-family: inherit;
-      font-size: 1rem;
-      font-weight: 700;
       cursor: pointer;
+      box-shadow: 0 0 25px rgba(0, 136, 255, 0.4);
+      transition: all 0.25s;
       margin-top: 0.5rem;
-      transition: all 0.2s;
-      box-shadow: 0 4px 20px var(--accent-glow);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
     }
 
     .btn-login:hover:not(:disabled) {
       transform: translateY(-2px);
-      box-shadow: 0 8px 30px var(--accent-glow);
+      box-shadow: 0 0 35px rgba(0, 136, 255, 0.7);
     }
-
-    .btn-login:active:not(:disabled) { transform: translateY(0); }
 
     .btn-login:disabled {
-      opacity: 0.7;
+      opacity: 0.6;
       cursor: not-allowed;
-      transform: none;
     }
-
-    .spinner {
-      width: 18px; height: 18px;
-      border: 2.5px solid rgba(255,255,255,0.3);
-      border-top-color: white;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
 
     .error-box {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      background: rgba(239,68,68,0.1);
-      border: 1px solid rgba(239,68,68,0.25);
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.3);
       border-radius: 10px;
       padding: 0.75rem 1rem;
       font-size: 0.85rem;
       color: #fca5a5;
       margin-bottom: 1.25rem;
       display: none;
+      align-items: center;
+      gap: 0.5rem;
     }
+
     .error-box.show { display: flex; }
 
     .divider {
       border: none;
       border-top: 1px solid var(--border);
-      margin: 1.5rem 0 1.25rem;
+      margin: 1.5rem 0;
     }
 
     .support-link {
       text-align: center;
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       color: var(--muted);
     }
+
     .support-link a {
-      color: #a5b4fc;
+      color: #38bdf8;
       text-decoration: none;
-      font-weight: 600;
+      font-weight: 700;
       transition: color 0.2s;
     }
-    .support-link a:hover { color: white; }
+
+    .support-link a:hover {
+      color: white;
+      text-decoration: underline;
+    }
 
     .security-note {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-top: 1.5rem;
       display: flex;
       align-items: center;
-      gap: 0.4rem;
       justify-content: center;
-      margin-top: 2rem;
-      font-size: 0.75rem;
-      color: rgba(156,163,175,0.5);
+      gap: 0.4rem;
     }
+
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
 
+  <!-- Particle Background Canvas -->
+  <canvas id="bg-canvas"></canvas>
+  <div class="grid-overlay"></div>
+  <div class="cursor-spotlight" id="spotlight"></div>
+
   <div class="login-wrapper">
     <div class="logo-row">
-      <img src="/logo.png" alt="MINITECH Logo" style="height: 64px; width: auto; object-fit: contain; filter: drop-shadow(0 0 20px rgba(0, 136, 255, 0.5));">
-      <h1>Minitech</h1>
-      <p>Đăng nhập để truy cập bảng điều khiển Admin</p>
+      <img src="/logo.png" alt="Minitech Logo" class="logo-img">
+      <h1>MINITECH ADMIN</h1>
+      <p>Đăng nhập để quản lý mã kích hoạt</p>
     </div>
 
     <div class="card">
       <div id="error-box" class="error-box">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        <span id="error-msg">Sai tên đăng nhập hoặc mật khẩu</span>
+        <span id="error-msg">Sai thông tin đăng nhập</span>
       </div>
 
       <form id="login-form" onsubmit="handleLogin(event)">
@@ -298,24 +341,86 @@
         </div>
 
         <button type="submit" class="btn-login" id="login-btn">
-          <span id="btn-text">Đăng nhập</span>
+          <span id="btn-text">Đăng nhập ngay</span>
         </button>
       </form>
 
       <hr class="divider">
 
       <div class="support-link">
-        Bạn là supporter? <a href="/support">Vào bảng hỗ trợ →</a>
+        Bạn cần hỗ trợ thi? <a href="/support.html">Vào phòng trợ giúp →</a>
       </div>
     </div>
 
     <div class="security-note">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      Kết nối bảo mật · Phiên đăng nhập 8 giờ
+      Kết nối mã hóa bảo mật · Phiên làm việc 8 giờ
     </div>
   </div>
 
   <script>
+    // Spotlight follows cursor
+    const spotlight = document.getElementById('spotlight');
+    document.addEventListener('mousemove', (e) => {
+      spotlight.style.left = e.clientX + 'px';
+      spotlight.style.top = e.clientY + 'px';
+    });
+
+    // Particle Background System
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height, particles = [];
+    function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.vx = (Math.random() - 0.5) * 0.7;
+        this.vy = (Math.random() - 0.5) * 0.7;
+        this.radius = Math.random() * 1.8 + 0.8;
+        this.alpha = Math.random() * 0.5 + 0.2;
+      }
+      update() {
+        this.x += this.vx; this.y += this.vy;
+        if (this.x < 0 || this.x > width) this.vx *= -1;
+        if (this.y < 0 || this.y > height) this.vy *= -1;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(0, 136, 255, ${this.alpha})`;
+        ctx.fill();
+      }
+    }
+    const count = Math.min(Math.floor((width * height) / 15000), 60);
+    for (let i = 0; i < count; i++) particles.push(new Particle());
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+        particles[i].draw();
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 110) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(0, 136, 255, ${0.18 * (1 - dist / 110)})`;
+            ctx.lineWidth = 0.6;
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+    animate();
+
     function togglePassword() {
       const pw = document.getElementById('password');
       const icon = document.getElementById('eye-icon');
@@ -357,7 +462,7 @@
           errorMsg.textContent = data.message || 'Sai tên đăng nhập hoặc mật khẩu';
           errorBox.classList.add('show');
           btn.disabled = false;
-          btnText.textContent = 'Đăng nhập';
+          btnText.textContent = 'Đăng nhập ngay';
           document.getElementById('password').value = '';
           document.getElementById('password').focus();
         }
@@ -365,17 +470,11 @@
         errorMsg.textContent = 'Lỗi kết nối server. Vui lòng thử lại.';
         errorBox.classList.add('show');
         btn.disabled = false;
-        btnText.textContent = 'Đăng nhập';
+        btnText.textContent = 'Đăng nhập ngay';
       }
     }
 
-    // Auto-focus username on load
     document.getElementById('username').focus();
-
-    // Press Enter anywhere to submit
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Enter') document.getElementById('login-form').dispatchEvent(new Event('submit'));
-    });
   </script>
 </body>
 </html>
