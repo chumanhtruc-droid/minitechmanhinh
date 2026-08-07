@@ -271,6 +271,32 @@
       border-color: var(--danger-red);
       color: var(--danger-red);
     }
+
+    /* Filter Tabs Styling */
+    .filter-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 0.4rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover {
+      background: rgba(0, 136, 255, 0.15);
+      color: white;
+      border-color: var(--accent-blue);
+    }
+
+    .filter-btn.active {
+      background: var(--accent-gradient);
+      color: white;
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 15px rgba(0, 136, 255, 0.4);
+    }
   </style>
 </head>
 <body>
