@@ -352,7 +352,7 @@
         const data = await resp.json();
         if (data.success) {
           btnText.textContent = '✓ Thành công';
-          setTimeout(() => { window.location.href = '/'; }, 400);
+          setTimeout(() => { window.location.href = '/admin'; }, 400);
         } else {
           errorMsg.textContent = data.message || 'Sai tên đăng nhập hoặc mật khẩu';
           errorBox.classList.add('show');

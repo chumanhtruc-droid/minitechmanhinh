@@ -18,6 +18,10 @@ router.get('/admin', requireAdmin, (req, res) => {
   res.sendFile(path.join(__dirname, '..', '..', 'public', 'admin.html'));
 });
 
+router.get('/admin.html', requireAdmin, (req, res) => {
+  res.sendFile(path.join(__dirname, '..', '..', 'public', 'admin.html'));
+});
+
 // Admin: Generate a new key
 router.post('/api/generate-key', (req, res) => {
   const db = readDb();
