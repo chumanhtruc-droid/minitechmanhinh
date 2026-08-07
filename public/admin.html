@@ -334,12 +334,15 @@
           </select>
         </div>
 
-        <button type="submit" class="btn-submit">⚡ Tạo Key Ngay</button>
+        <button type="button" onclick="generateKey(event)" class="btn-submit">⚡ Tạo Key Ngay</button>
       </form>
 
-      <div id="gen-result" class="generated-box">
+      <div id="gen-result" class="generated-box" style="margin-top:1.25rem; padding:1rem; background:rgba(16,185,129,0.1); border:1px dashed var(--success-green); border-radius:8px; display:none;">
         <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.4rem;">Mã Key vừa tạo:</div>
-        <div id="key-output" class="key-code"></div>
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:0.5rem;">
+          <div id="key-output" class="key-code" style="font-family:monospace; font-size:1.1rem; font-weight:800; color:var(--success-green); user-select:all;"></div>
+          <button type="button" onclick="copyGenKey()" style="background:#10b981; color:white; border:none; padding:0.35rem 0.75rem; border-radius:6px; font-weight:700; font-size:0.75rem; cursor:pointer;">📋 Copy</button>
+        </div>
       </div>
     </div>
 
@@ -428,13 +431,9 @@
         console.error("Lỗi tải danh sách key:", err);
       }
     }
-      } catch (err) {
-        console.error("Lỗi tải danh sách key:", err);
-      }
-    }
 
     async function generateKey(e) {
-      e.preventDefault();
+      if (e) e.preventDefault();
       const duration_hours = document.getElementById('duration').value;
       try {
         const res = await fetch('/api/generate-key', {
@@ -445,11 +444,23 @@
         const data = await res.json();
         if (data.success) {
           document.getElementById('key-output').textContent = data.key;
-          document.getElementById('gen-result').classList.add('show');
-          loadKeys();
+          document.getElementById('gen-result').style.display = 'block';
+          await loadKeys();
+          alert(`🎉 Tạo thành công Key: ${data.key}`);
+        } else {
+          alert("Lỗi: " + (data.message || "Không tạo được Key"));
         }
       } catch (err) {
-        alert("Lỗi tạo key!");
+        console.error(err);
+        alert("Lỗi máy chủ khi tạo Key!");
+      }
+    }
+
+    function copyGenKey() {
+      const keyCode = document.getElementById('key-output').textContent;
+      if (keyCode) {
+        navigator.clipboard.writeText(keyCode);
+        alert(`Đã copy mã Key: ${keyCode}`);
       }
     }
 
