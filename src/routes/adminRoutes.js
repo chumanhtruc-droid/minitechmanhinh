@@ -53,9 +53,35 @@ router.get('/api/keys', (req, res) => {
   (db.keys || []).forEach(k => {
     const normKey = (k.key || '').toUpperCase();
     if (normKey) {
+      let durationText = "Vĩnh viễn";
+      const h = k.durationHours || 0;
+      if (h === 1) durationText = "1 Giờ";
+      else if (h === 24) durationText = "24 Giờ (1 Ngày)";
+      else if (h === 72) durationText = "72 Giờ (3 Ngày)";
+      else if (h === 720) durationText = "720 Giờ (30 Ngày)";
+      else if (h > 0) durationText = `${h} Giờ`;
+
+      let remainingText = "Chưa kích hoạt";
+      if (k.expiresAt) {
+        const diffMs = new Date(k.expiresAt).getTime() - Date.now();
+        if (diffMs > 0) {
+          const totalMinutes = Math.floor(diffMs / 60000);
+          const days = Math.floor(totalMinutes / (24 * 60));
+          const hours = Math.floor((totalMinutes % (24 * 60)) / 60);
+          const mins = totalMinutes % 60;
+          if (days > 0) remainingText = `${days}d ${hours}h ${mins}m`;
+          else if (hours > 0) remainingText = `${hours}h ${mins}m`;
+          else remainingText = `${mins}m`;
+        } else {
+          remainingText = "Đã hết hạn";
+        }
+      }
+
       keyMap.set(normKey, {
         ...k,
         key: normKey,
+        durationText,
+        remainingTimeText: remainingText,
         screenshotCount: 0
       });
     }

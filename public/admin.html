@@ -324,6 +324,7 @@
           <thead>
             <tr>
               <th>Mã Key</th>
+              <th>Loại Gói Key</th>
               <th>Trạng thái</th>
               <th>Thời hạn còn lại</th>
               <th>HWID Đã Khóa</th>
@@ -331,7 +332,7 @@
             </tr>
           </thead>
           <tbody id="keys-tbody">
-            <tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Đang tải danh sách Key...</td></tr>
+            <tr><td colspan="6" style="text-align:center; color:var(--text-muted);">Đang tải danh sách Key...</td></tr>
           </tbody>
         </table>
       </div>
@@ -345,13 +346,14 @@
         const data = await res.json();
         const tbody = document.getElementById('keys-tbody');
         if (!data.success || !data.keys || data.keys.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Chưa có Key nào được tạo.</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">Chưa có Key nào được tạo.</td></tr>';
           return;
         }
 
         tbody.innerHTML = data.keys.map(k => `
           <tr>
             <td style="font-family:monospace; font-weight:700; color:var(--accent-blue);">${k.key}</td>
+            <td><span style="background:rgba(0,136,255,0.15); border:1px solid rgba(0,136,255,0.3); color:#38bdf8; padding:0.2rem 0.65rem; border-radius:6px; font-weight:700; font-size:0.75rem;">${k.durationText || 'Vĩnh viễn'}</span></td>
             <td><span class="badge ${k.status === 'active' ? 'badge-active' : 'badge-expired'}">${k.status}</span></td>
             <td>${k.remainingTimeText || (k.durationHours === 0 ? 'Vĩnh viễn' : 'Chưa kích hoạt')}</td>
             <td style="font-family:monospace; font-size:0.75rem; color:${k.hwid ? '#10b981' : 'var(--text-muted)'};">${k.hwid || 'Chưa gắn'}</td>
